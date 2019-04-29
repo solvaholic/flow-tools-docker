@@ -3,10 +3,10 @@
 # docker build --rm -t solvaholic/flow-tools .
 
 # docker run --rm -d -v $(realpath .)/var-db-flows:/var/db/flows \
-# -p 5678:5678/udp -e KEY=VALUE solvaholic/flow-tools
+# -p 5678:5678/udp solvaholic/flow-tools
 
 # docker run --rm -it -v $(realpath .)/var-db-flows:/var/db/flows \
-# -e KEY=VALUE --entrypoint /bin/sh solvaholic/flow-tools
+# --entrypoint /bin/sh solvaholic/flow-tools
 
 FROM alpine:3.9 AS build
 
