@@ -6,6 +6,14 @@ I had trouble finding a readily available package for it so I built it on Alpine
 
 In case you, too, want to use `flow-tools` - here ya go!
 
+To run `flow-tools` with your local `var-db-flows` directory:
+
+```
+docker run --rm -it -v $(realpath .)/var-db-flows:/var/db/flows solvaholic/flow-tools:latest
+```
+
+## This Repository
+
 This repository contains the source of the following Docker images:
 
 - `solvaholic/flow-tools`: Includes flow-tools 0.68.5.1 to capture and report network flow (netflow) data.
