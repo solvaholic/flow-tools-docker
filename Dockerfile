@@ -8,7 +8,7 @@
 # docker run --rm -it -v $(realpath .)/var-db-flows:/var/db/flows \
 # -e KEY=VALUE --entrypoint /bin/sh solvaholic/flow-tools
 
-FROM alpine:3.9
+FROM alpine:3.9 AS build
 
 # Update and install some tools.
 RUN apk -U upgrade
@@ -22,16 +22,20 @@ WORKDIR flow-tools-0.68.5.1
 RUN ./configure
 RUN make && make install
 
+
+FROM alpine:3.9 AS run
+
+# Update and install some tools.
+RUN apk -U upgrade
+RUN apk add zlib-dev
+
+# Copy flow-tools from build.
+COPY --from=build /usr/local/flow-tools /usr/local/flow-tools
+
 # Set up the environment.
 RUN mkdir -m 755 -p /var/db/flows
 RUN touch /var/run/flow-capture.pid
 ENV PATH="/usr/local/flow-tools/bin:${PATH}"
-
-# Clean up.
-RUN make clean
-WORKDIR ..
-RUN rm -rf flow-tools-0.68.5.1
-RUN apk del build-base bison flex curl
 
 # Set entry point and expose port.
 ENTRYPOINT ["/usr/local/flow-tools/bin/flow-capture", "-p/var/run/flow-capture.pid", "-n287", "-w/var/db/flows", "-S5", "-D"]
