@@ -6,7 +6,7 @@
 # -p 5678:5678/udp solvaholic/flow-tools
 
 # docker run --rm -it -v $(realpath .)/var-db-flows:/var/db/flows \
-# --entrypoint /bin/sh solvaholic/flow-tools
+# solvaholic/flow-tools /bin/ash
 
 FROM debian:stretch-slim AS build
 
@@ -42,6 +42,6 @@ RUN touch /var/run/flow-capture.pid
 ENV PATH="/usr/local/flow-tools/bin:${PATH}"
 
 # Set entry point and expose port.
-ENTRYPOINT ["/usr/local/flow-tools/bin/flow-capture", "-p/var/run/flow-capture.pid", "-n287", "-w/var/db/flows", "-S5", "-D"]
+ENTRYPOINT [ "/bin/sh", "-c"]
 EXPOSE 5678/udp
-CMD ["0/0/5678"]
+CMD ["/usr/local/flow-tools/bin/flow-capture", "-p/var/run/flow-capture.pid", "-n287", "-w/var/db/flows", "-S5", "-D" "0/0/5678"]
