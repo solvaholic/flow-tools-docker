@@ -19,6 +19,8 @@ WORKDIR /
 COPY flow-tools-0.68.5.1.tar.bz2 ./
 RUN tar xf flow-tools-0.68.5.1.tar.bz2
 WORKDIR flow-tools-0.68.5.1
+ADD https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD config.guess
+ADD https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD config.sub
 RUN ./configure
 RUN make && make install
 
