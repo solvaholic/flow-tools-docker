@@ -18,7 +18,7 @@ RUN apk add curl build-base bison flex zlib-dev
 WORKDIR /
 COPY flow-tools-0.68.5.1.tar.bz2 ./
 RUN tar xf flow-tools-0.68.5.1.tar.bz2
-WORKDIR flow-tools-0.68.5.1
+WORKDIR /flow-tools-0.68.5.1
 ADD https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD config.guess
 ADD https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD config.sub
 RUN ./configure
@@ -40,6 +40,5 @@ RUN touch /var/run/flow-capture.pid
 ENV PATH="/usr/local/flow-tools/bin:${PATH}"
 
 # Set entry point and expose port.
-ENTRYPOINT [ "/bin/sh", "-c"]
 EXPOSE 5678/udp
-CMD ["/usr/local/flow-tools/bin/flow-capture", "-p/var/run/flow-capture.pid", "-n287", "-w/var/db/flows", "-S5", "-D" "0/0/5678"]
+CMD ["/usr/local/flow-tools/bin/flow-capture","-p/var/run/flow-capture.pid","-n287","-w/var/db/flows","-S5","-D","0/0/5678"]
