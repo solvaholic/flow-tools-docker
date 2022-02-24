@@ -29,7 +29,7 @@ FROM alpine:3.9 AS run
 
 # Update and install some tools.
 RUN apk -U upgrade
-RUN apk add zlib-dev
+RUN apk add zlib-dev python
 
 # Copy flow-tools from build.
 COPY --from=build /usr/local/flow-tools /usr/local/flow-tools
@@ -37,6 +37,7 @@ COPY --from=build /usr/local/flow-tools /usr/local/flow-tools
 # Set up the environment.
 RUN mkdir -m 755 -p /var/db/flows
 RUN touch /var/run/flow-capture.pid
+RUN cp /usr/bin/env /bin/
 ENV PATH="/usr/local/flow-tools/bin:${PATH}"
 
 # Set entry point and expose port.

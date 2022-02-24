@@ -18,7 +18,7 @@ RUN apt install -y curl build-essential bison flex zlib1g-dev
 WORKDIR /
 COPY flow-tools-0.68.5.1.tar.bz2 ./
 RUN tar xf flow-tools-0.68.5.1.tar.bz2
-WORKDIR flow-tools-0.68.5.1
+WORKDIR /flow-tools-0.68.5.1
 ADD https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD config.guess
 ADD https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD config.sub
 RUN ./configure
@@ -29,7 +29,7 @@ FROM debian:stretch-slim AS run
 
 # Update, install packages, delete cache.
 RUN apt update && \
-    apt install -y zlib1g-dev && \
+    apt install -y zlib1g-dev python && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -39,9 +39,9 @@ COPY --from=build /usr/local/flow-tools /usr/local/flow-tools
 # Set up the environment.
 RUN mkdir -m 755 -p /var/db/flows
 RUN touch /var/run/flow-capture.pid
+RUN cp /usr/bin/env /bin/
 ENV PATH="/usr/local/flow-tools/bin:${PATH}"
 
 # Set entry point and expose port.
-ENTRYPOINT [ "/bin/sh", "-c"]
 EXPOSE 5678/udp
-CMD ["/usr/local/flow-tools/bin/flow-capture", "-p/var/run/flow-capture.pid", "-n287", "-w/var/db/flows", "-S5", "-D" "0/0/5678"]
+CMD ["/usr/local/flow-tools/bin/flow-capture","-p/var/run/flow-capture.pid","-n287","-w/var/db/flows","-S5","-D","0/0/5678"]
